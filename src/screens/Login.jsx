@@ -1,7 +1,8 @@
 
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { Button, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import  BatLogo  from "../../assets/logo.png";
 
 
 const Login = ({ navigation, Cadastro, Home}) => {
@@ -28,8 +29,16 @@ const Login = ({ navigation, Cadastro, Home}) => {
     center: {
       flex: 1,
       justifyContent: "center",
-    }
-  })
+      backgroundColor: `#ffffff`,
+      height: '100%'
+    },
+    logo: {
+      margin:25,
+      width: 250, 
+      height: 250, 
+      alignSelf: 'center', 
+  }
+})
 
 
   const validEmail = (email) => {
@@ -45,8 +54,12 @@ const Login = ({ navigation, Cadastro, Home}) => {
   }
 
   return (
+
     <SafeAreaView style={styles.center}>
       <StatusBar />
+    <View>
+      <Image source={BatLogo} style={styles.logo}/>
+      </View>
       <Text style={{fontSize:20, fontWeight:"bold",textAlign:"center"}}>BEM VINDO(A)</Text>
       <TextInput
         onChangeText={setEmail}
@@ -64,7 +77,7 @@ const Login = ({ navigation, Cadastro, Home}) => {
         onpress
       />
   
-      <TouchableOpacity>
+      <TouchableOpacity style={{margin:18}}>
         <Button title='Entrar' onPress={handleLogin} />  
       </TouchableOpacity>
         { error &&  <Text style={styles.text}>Email e Senha devem ser obrigatórios</Text>}
@@ -73,7 +86,7 @@ const Login = ({ navigation, Cadastro, Home}) => {
               onPress={() =>
           navigation.navigate('Cadastro', {Cadastro : Cadastro})}>Cadastrar</Text>
 
-      <Text style={{ textAlign: 'center', verticalAlign: 'bottom' , margin:18 }}>Desenvolvido por Felipe Augusto</Text>
+      <Text style={{ textAlign: 'center', verticalAlign: 'bottom' , margin:18 }}>Desenvolvido por Felipe Augusto e Leonardo Pedroso</Text>
     </SafeAreaView>
   );
 

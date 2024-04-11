@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "primeiroProjeto",
-    "slug": "primeiroProjeto",
+    "name": "AuctionExpress",
+    "slug": "AuctionExpress",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

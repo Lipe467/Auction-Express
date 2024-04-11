@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { Button, ScrollView, StyleSheet,Text,TextInput, TouchableOpacity, View } from "react-native";
+import { Button, Image, ScrollView, StyleSheet,Text,TextInput, TouchableOpacity, View } from "react-native";
 import RadioForm from "react-native-simple-radio-button";
+import  BatLogo  from "../../assets/logo.png";
 
 const Cadastro = ({navigation, Home, Login}) => {
 
-    const [cep, setcep] = useState();
-    const[data,setdata] = useState();
-    const [cpf, setpf] = useState();
-    const [nome, setnome] = useState();
-    const [logradouro, setlogradouro] = useState();
-    const [bairro, setbairro] = useState();
-    const [cidade, setcidade] = useState();
-    const [estado, setestado] = useState();
+
+  const[dados, setdados] = useState({
+    telefone: "",
+    nome: "",
+  })
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
@@ -36,6 +35,11 @@ const Cadastro = ({navigation, Home, Login}) => {
         {label: 'Masculino', value: 0 },
         {label: 'Feminino', value: 1 },
       ];
+
+      var radio_props2 = [
+        {label: 'Cliente', value2: 0 },
+        {label: 'Entregador', value2: 1 },
+      ];
     
 
 
@@ -48,82 +52,57 @@ const Cadastro = ({navigation, Home, Login}) => {
         }
       }
 
+      const handleradio2 = (label) => {
+        if(label = 0){
+            value2 = 0;
+        } else {
+            value2 = 1
+         
+        }
+      }
+
  
     
     const styles = StyleSheet.create({
-        containerPrincipal: {
-            flex:1,
-            flexDirection:'column'
-        },
-        topBar: {
-            flexDirection:'row',
-            height:70,
-            backgroundColor:'#018786'
-        },
-        title: {
-            color:'#fff',
-            fontSize:25,
-            fontWeight:'bold',
-            alignSelf: 'center',
-            margin: 20
-        },
-        containerCep: {
-            flexDirection: 'row',
-            height: 100,
-            marginHorizontal:20,
-        
-        },
-        botaoBuscar: {
-            backgroundColor: '#018786',
-            width: 120,
-            height:70,
-            marginTop:30,
-            marginEnd:20,
-            borderRadius:10,
-            padding:20,
-
-        },
-        textoBotaBuscar: {
-            color:'#FFF',
-            fontSize:18,
-            fontWeight: 'bold',
-            alignSelf:'center',
-            
-
-        },
-        caixadeTexto: {
-            borderColor:'#000',
-            borderWidth:2,
-            padding:15,
-            fontSize:18,
-            borderRadius:10,
-            marginTop:10,
-            marginHorizontal: 20
-        },text: {
-            color: `#ff0000`,
-            textAlign: 'center'
-          }
+      button: {
+        gap: 12
+      },
+      input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+      },
+      text: {
+        color: `#ff0000`,
+        textAlign: 'center'
+      },
+      center: {
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: `#ffffff`,
+      height: '100%'
+      },
+      logo: {
+        margin: 25,
+        width: 125, 
+        height: 125, 
+        alignSelf: 'center', 
+    }
     })
  
-      
-    
-
     return (
-        <View style={styles.containerPrincipal}>
+        <View style={styles.center}>
             <ScrollView>
             <TextInput
-   style={styles.caixadeTexto}
-    onChangeText={nome}
+   style={styles.input}
+    onChangeText={dados.nome}
     placeholder="Nome Completo"
     />
-    <TextInput
-    style={{
-        borderColor: '#000',borderWidth:2,width:100,
-        fontSize:18, marginTop:10, marginEnd:20, borderRadius:10,
-        marginHorizontal:20, padding:15
-    }}
-    onChangeText={data}
-    placeholder="Idade"
+<TextInput
+   style={styles.input}
+    onChangeText={dados.telefone}
+    placeholder="Telefone"
     />
 
 <RadioForm
@@ -131,67 +110,28 @@ const Cadastro = ({navigation, Home, Login}) => {
   initial={0}
   onPress={handleradio}
 />
-        <TextInput
-     style={styles.caixadeTexto}
-    onChangeText={cpf}
-    placeholder="CPF"
-    value={cpf}
-    />
-        
-        <View style={styles.containerCep}>
-    <TextInput
-    style={{
-        borderColor: '#000',borderWidth:2,width:200,
-        fontSize:18, marginTop:30, marginEnd:20, borderRadius:10
-    }}
-    onChangeText={cep}
-    placeholder="Cep"
-    value={cep}
-    />
-</View>
-        <TextInput
-   style={styles.caixadeTexto}
-    onChangeText={logradouro}
-    placeholder="Logradouro"
-    />
-
-<TextInput
-   style={styles.caixadeTexto}
-    onChangeText={bairro}
-    placeholder="Bairro"
-    />
-
-<TextInput
-    style={styles.caixadeTexto}
-    onChangeText={cidade}
-    placeholder="Cidade"
-    />
-
-<TextInput
-    style={{
-        borderColor: '#000',borderWidth:2,width:100,
-        fontSize:18, marginTop:10, marginEnd:20, borderRadius:10,
-        marginHorizontal:20, padding:15
-    }}
-    onChangeText={estado}
-    placeholder="Estado"
-    />
+    
     
           <TextInput
-          style={styles.caixadeTexto}
+          style={styles.input}
         onChangeText={setEmail}
         value={email}
         textContentType="emailAddress"
         placeholder='Email'
       />
       <TextInput
-      style={styles.caixadeTexto}
+      style={styles.input}
         onChangeText={setPassword}
         value={password}
         placeholder='Senha'
         secureTextEntry={true}
         onpress
       />
+      <RadioForm
+  radio_props={radio_props2}
+  initial={0}
+  onPress={handleradio2}
+/>
       <TouchableOpacity style={{margin:18}}>
         <Button title='Cadastrar' onPress={handleLogin} />
       </TouchableOpacity>
@@ -199,6 +139,9 @@ const Cadastro = ({navigation, Home, Login}) => {
         <Button title='voltar' onPress={handleback} />
       </TouchableOpacity>
       { error &&  <Text style={styles.text}>Email e Senha devem ser obrigatórios</Text>}
+      <View>
+      <Image source={BatLogo} style={styles.logo}/>
+      </View>
 </ScrollView>
     </View>
       
