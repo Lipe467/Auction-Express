@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import axios from "axios";
 import RadioForm from "react-native-simple-radio-button";
-import  BatLogo  from "../assets/logo.png";
+import  BatLogo  from "../../assets/logo.png";
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState("");
