@@ -1,96 +1,113 @@
+import React, { useState } from "react";
+import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import axios from "axios";
+import BatLogo from "../assets/logo.png";
 
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import { Button, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import  BatLogo  from "../../assets/logo.png";
+const Login = ({ navigation, Cadastro }) => {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
 
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://192.168.18.12:8080/cadastro/login', {
+        email: email,
+        senha: senha,
+      });
 
-const Login = ({ navigation, Cadastro, Home}) => {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(false)
-
-
-  const styles = StyleSheet.create({
-    button: {
-      gap: 12
-    },
-    input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
-    },
-    text: {
-      color: `#ff0000`,
-      textAlign: 'center'
-    },
-    center: {
-      flex: 1,
-      justifyContent: "center",
-      backgroundColor: `#ffffff`,
-      height: '100%'
-    },
-    logo: {
-      margin:25,
-      width: 250, 
-      height: 250, 
-      alignSelf: 'center', 
-  }
-})
-
-
-  const validEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
-  }
-
-  const handleLogin = () => {
-    if(validEmail(email) && password) {
-      navigation.navigate('Home', { Home: Home })
-    } else {
-      setError(true)
+      if (response.status === 200) {
+        navigation.navigate('Home'); 
+      }
+    } catch (error) {
+      setError("Email ou senha incorretos."); 
     }
-  }
+  };
 
   return (
-
-    <SafeAreaView style={styles.center}>
-      <StatusBar />
-    <View>
-      <Image source={BatLogo} style={styles.logo}/>
-      </View>
-      <Text style={{fontSize:20, fontWeight:"bold",textAlign:"center"}}>BEM VINDO(A)</Text>
-      <TextInput
-        onChangeText={setEmail}
-        value={email}
-        textContentType="emailAddress"
-        style={styles.input}
-        placeholder='Email'
-      />
-      <TextInput
-        onChangeText={setPassword}
-        value={password}
-        style={styles.input}
-        placeholder='Senha'
-        secureTextEntry={true}
-        onpress
-      />
-  
-      <TouchableOpacity style={{margin:18}}>
-        <Button title='Entrar' onPress={handleLogin} />  
-      </TouchableOpacity>
-        { error &&  <Text style={styles.text}>Email e Senha devem ser obrigatórios</Text>}
-       
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.logoContainer}>
+          <Image source={BatLogo} style={styles.logo} />
+        </View>
+        <Text style={styles.title}>BEM VINDO(A)</Text>
+        <TextInput
+          onChangeText={setEmail}
+          value={email}
+          textContentType="emailAddress"
+          style={styles.input}
+          placeholder='Email'
+        />
+        <TextInput
+          onChangeText={setSenha}
+          value={senha}
+          style={styles.input}
+          placeholder='Senha'
+          secureTextEntry={true}
+        />
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
         <Text style={{textAlign: 'center', verticalAlign: 'bottom' , margin:18}}
               onPress={() =>
           navigation.navigate('Cadastro', {Cadastro : Cadastro})}>Cadastrar</Text>
-
-      <Text style={{ textAlign: 'center', verticalAlign: 'bottom' , margin:18 }}>Desenvolvido por Felipe Augusto e Leonardo Pedroso</Text>
-    </SafeAreaView>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      </ScrollView>
+    </View>
   );
+};
 
-}
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  logoContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginBottom: 60,
+    paddingTop: 20,
+    paddingBottom: 5,
+  },
+  logo: {
+    width: 250,
+    height: 250,
+    alignSelf: 'center',
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  input: {
+    height: 42,
+    marginVertical: 10,
+    borderWidth: 2,
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    backgroundColor: '#007bff',
+    borderRadius: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 80,
+    width: '80%',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+});
 
 export default Login;
