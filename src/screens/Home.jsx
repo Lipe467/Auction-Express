@@ -1,13 +1,17 @@
 import { Button, TouchableOpacity, View } from "react-native";
 
-import Produto from "./Produto";
+import { useEffect } from "react";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const clienteId = route.params?.clienteId;
 
 
     const handleProduct = () => {
-        navigation.navigate('Produto', { Produto: Produto })
+        navigation.navigate('Produto', { clienteId: clienteId })
     }
+    useEffect(() => {
+      console.log("clienteId na Home:", clienteId);
+    }, [clienteId]);
 
     return (
   <View>

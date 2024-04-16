@@ -1,22 +1,28 @@
 import React, { useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, useEffect } from "react-native";
 import axios from "axios";
-import BatLogo from "../assets/logo.png";
+import BatLogo from "../../assets/logo.png";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation, Cadastro }) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
+  
 
+  
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://192.168.18.12:8080/cadastro/login', {
         email: email,
         senha: senha,
       });
-
       if (response.status === 200) {
-        navigation.navigate('Home'); 
+        const clienteId = response.data.clienteId;
+        AsyncStorage.setItem('clienteId', String(clienteId));
+        console.log(clienteId);
+        navigation.navigate('Home', { clienteId: clienteId });
+
       }
     } catch (error) {
       setError("Email ou senha incorretos."); 
