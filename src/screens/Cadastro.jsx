@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import axios from "axios";
 import RadioForm from "react-native-simple-radio-button";
-import  BatLogo  from "../assets/logo.png";
+import  BatLogo  from "../../assets/logo.png";
+
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState("");
@@ -16,24 +17,51 @@ const Cadastro = ({ navigation }) => {
   });
 
   const cadastrarUsuario = async () => {
-    try {
-      const response = await axios.post('http://192.168.18.12:8080/cadastro', {
-        nome: nome,
-        email: email,
-        senha: senha,
-        telefone: telefone,
-        sexo: dados.sexo === 0 ? "Homem" : "Mulher",
-        tipoUsuario: dados.tipoUsuario === 0 ? "Cliente" : "Entregador",
-      });
-      
-      console.log(response.data);
-      navigation.navigate('Login');
-    } catch (error) {
-      console.error(error);
-      setError("Erro ao cadastrar usuário. Por favor, tente novamente.");
+    if (!nome || !email || !telefone || !senha) {
+        setError("Por favor, preencha todos os campos obrigatórios.");
+        return;
     }
-  };
+    else if (senha.length < 6) {
+        setError("A senha deve conter pelo menos 6 caracteres.");
+        return;
+    }
+    else if (!validarTelefone(telefone)) {
+        setError("Por favor, insira um telefone válido.");
+        return;
+    }
+    else if(!validarEmail(email)){
+        setError("Por favor insira um email valido. Email deve conter @gmail.com ou @hotmail.com");
+    }
+    try {
+        const response = await axios.post('http://192.168.137.1:8080/cadastro', {
+            nome: nome,
+            email: email,
+            senha: senha,
+            telefone: telefone,
+            sexo: dados.sexo === 0 ? "Homem" : "Mulher",
+            tipoUsuario: dados.tipoUsuario === 0 ? "Cliente" : "Entregador",
+        });
 
+        console.log(response.data);
+        navigation.navigate('Login');
+    } catch (error) {
+        console.error(error);
+        if (error.response && error.response.status === 500 && error.response.data.message === "E-mail já cadastrado") {
+          setError("E-mail já cadastrado. Por favor, tente com outro e-mail.");
+      } else {
+          setError("Erro ao cadastrar usuário. Por favor, tente novamente.");
+      }
+    }
+};
+
+const validarTelefone = (telefone)=>{
+    var validTelefone = new RegExp('^((1[1-9])|([2-9][0-9]))((3[0-9]{3}[0-9]{4})|(9[0-9]{3}[0-9]{5}))$'); 
+    return validTelefone.test(telefone);
+}
+const validarEmail = (email)=>{
+  var validEmail = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+  return validEmail.test(email);
+}
   const radio_props = [
     {label: 'Masculino', value: 0 },
     {label: 'Feminino', value: 1 },
@@ -65,9 +93,9 @@ const Cadastro = ({ navigation }) => {
         <TextInput
           style={styles.input}
           onChangeText={text => setTelefone(text)}
-          placeholder="Telefone"
+          placeholder="(99) 99999-9999"
+          keyboardType="numeric"
         />
-
         <RadioForm
           radio_props={radio_props}
           initial={0}
@@ -92,7 +120,7 @@ const Cadastro = ({ navigation }) => {
           initial={0}
           onPress={handleradio2}
         />
-          { error &&  <Text style={styles.MenssagemErro}>Email e Senha devem ser obrigatórios</Text>}
+          {error && <Text style={styles.MenssagemdeValidacao}>{error}</Text>}
         <TouchableOpacity style={styles.button} onPress={cadastrarUsuario}>
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
@@ -146,7 +174,7 @@ const styles = StyleSheet.create({
   Text: {
     color: "#007bff",
   },
-  MenssagemErro: {
+  MenssagemdeValidacao: {
     color: "red",
     marginBottom: 10,
   },

@@ -17,7 +17,7 @@ const Produto = ({ navigation, route }) => {
   const cadastrarProduto = async () => {
     try {
       
-      const response = await axios.post('http://192.168.18.12:8080/postarProduto', {
+      const response = await axios.post('http://192.168.137.1:8080/postarProduto', {
         descricao: descricao,
         localOrigemEstado: localOrigemEstado,
         localOrigemCidade: localOrigemCidade,

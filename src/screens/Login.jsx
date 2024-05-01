@@ -13,7 +13,7 @@ const Login = ({ navigation, Cadastro }) => {
   
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://192.168.18.12:8080/cadastro/login', {
+      const response = await axios.post('http://192.168.137.1:8080/cadastro/login', {
         email: email,
         senha: senha,
       });
