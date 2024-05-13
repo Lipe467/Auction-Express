@@ -4,6 +4,7 @@ import Login from '../screens/Login';
 import Cadastro from '../screens/Cadastro';
 import Home from '../screens/Home';
 import Produto from '../screens/Produto';
+import DetalhesProduto from '../screens/DetalhesProduto';
 
 const Routes = () => {
 
@@ -27,6 +28,10 @@ const Routes = () => {
        <Stack.Screen
         name="Produto"
         component={Produto}
+      />
+      <Stack.Screen
+        name="DetalhesProduto"
+        component={DetalhesProduto}
       />
     </Stack.Navigator>
   </NavigationContainer>

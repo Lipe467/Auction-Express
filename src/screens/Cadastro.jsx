@@ -1,135 +1,132 @@
 import React, { useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import axios from "axios";
 import RadioForm from "react-native-simple-radio-button";
 import  BatLogo  from "../../assets/logo.png";
-
+import IconUser from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/Entypo'
+import Icons from 'react-native-vector-icons/Fontisto'
+import { IP_API } from "../config/config";
 
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [error, setError] = useState("");
   const [telefone, setTelefone]= useState("");
-  const [dados, setDados] = useState({
-    tipoUsuario: "",
-    sexo: "",
-  });
+  const [sexo, setSexo] = useState(0); 
+  const [tipoUsuario, setTipoUsuario] = useState(0); 
+  const [error, setError] = useState("");
 
   const cadastrarUsuario = async () => {
     if (!nome || !email || !telefone || !senha) {
-        setError("Por favor, preencha todos os campos obrigatórios.");
-        return;
+      setError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    } else if (senha.length < 6) {
+      setError("A senha deve conter pelo menos 6 caracteres.");
+      return;
+    } else if (!validarTelefone(telefone)) {
+      setError("Por favor, insira um telefone válido.");
+      return;
+    } else if (!validarEmail(email)) {
+      setError("Por favor insira um email válido. O email deve conter @gmail.com ou @hotmail.com");
+      return;
     }
-    else if (senha.length < 6) {
-        setError("A senha deve conter pelo menos 6 caracteres.");
-        return;
-    }
-    else if (!validarTelefone(telefone)) {
-        setError("Por favor, insira um telefone válido.");
-        return;
-    }
-    else if(!validarEmail(email)){
-        setError("Por favor insira um email valido. Email deve conter @gmail.com ou @hotmail.com");
-    }
+    
     try {
-        const response = await axios.post('http://192.168.137.1:8080/cadastro', {
-            nome: nome,
-            email: email,
-            senha: senha,
-            telefone: telefone,
-            sexo: dados.sexo === 0 ? "Homem" : "Mulher",
-            tipoUsuario: dados.tipoUsuario === 0 ? "Cliente" : "Entregador",
-        });
+      const response = await axios.post(`${IP_API}/cadastro`, {
+        nome: nome,
+        email: email,
+        senha: senha,
+        telefone: telefone,
+        sexo: sexo === 0 ? "Homem" : "Mulher",
+        tipoUsuario: tipoUsuario === 0 ? "Cliente" : "Entregador",
+      });
 
-        console.log(response.data);
-        navigation.navigate('Login');
+      console.log(response.data);
+      navigation.navigate('Login');
     } catch (error) {
-        console.error(error);
-        if (error.response && error.response.status === 500 && error.response.data.message === "E-mail já cadastrado") {
-          setError("E-mail já cadastrado. Por favor, tente com outro e-mail.");
+      console.error(error);
+      if (error.response && error.response.status === 500 && error.response.data.message === "E-mail já cadastrado") {
+        setError("E-mail já cadastrado. Por favor, tente com outro e-mail.");
       } else {
-          setError("Erro ao cadastrar usuário. Por favor, tente novamente.");
+        setError("Erro ao cadastrar usuário. Por favor, tente novamente.");
       }
     }
-};
-
-const validarTelefone = (telefone)=>{
-    var validTelefone = new RegExp('^((1[1-9])|([2-9][0-9]))((3[0-9]{3}[0-9]{4})|(9[0-9]{3}[0-9]{5}))$'); 
-    return validTelefone.test(telefone);
-}
-const validarEmail = (email)=>{
-  var validEmail = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
-  return validEmail.test(email);
-}
-  const radio_props = [
-    {label: 'Masculino', value: 0 },
-    {label: 'Feminino', value: 1 },
-  ];
-
-  const radio_props2 = [
-    {label: 'Cliente', value: 0 },
-    {label: 'Entregador', value: 1 },
-  ];
-
-  const handleradio = (label) => {
-    setDados({...dados, genero: label});
   };
 
-  const handleradio2 = (label) => {
-    setDados({...dados, tipoUsuario: label});
+  const validarTelefone = (telefone) => {
+    var validTelefone = new RegExp('^((1[1-9])|([2-9][0-9]))((3[0-9]{3}[0-9]{4})|(9[0-9]{3}[0-9]{5}))$'); 
+    return validTelefone.test(telefone);
+  };
+
+  const validarEmail = (email) => {
+    var validEmail = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
+    return validEmail.test(email);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.title}>Cadastro</Text>
-        
-        <TextInput
-          style={styles.input}
-          placeholder="Nome Completo"
-          onChangeText={text => setNome(text)}
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={text => setTelefone(text)}
-          placeholder="(99) 99999-9999"
-          keyboardType="numeric"
-        />
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome Completo"
+            onChangeText={text => setNome(text)}
+          />
+          <IconUser style={styles.icon} name="user" size={25}/>
+        </View>
+        <View>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => setTelefone(text)}
+            placeholder="(99) 99999-9999"
+            keyboardType="numeric"
+          />
+          <IconUser style={styles.icon} name="phone" size={25}/>
+         </View>
         <RadioForm
-          radio_props={radio_props}
-          initial={0}
-          onPress={handleradio}
+          radio_props={[
+            { label: 'Homem', value: 0 },
+            { label: 'Mulher', value: 1 },
+          ]}
+          onPress={value => setSexo(value)}
+          labelStyle={styles.fontTextRadio}
         />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={text => setEmail(text)}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          secureTextEntry={true}
-          onChangeText={text => setSenha(text)}
-        />
-        
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={text => setEmail(text)}
+          />
+          <Icon style={styles.icon} name="mail" size={25}/>
+        </View>
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            secureTextEntry={true}
+            onChangeText={text => setSenha(text)}
+          />
+           <Icons style={styles.icon} name="locked"  size={25}/>
+        </View>
         <RadioForm
-          radio_props={radio_props2}
-          initial={0}
-          onPress={handleradio2}
+          radio_props={[
+            { label: 'Cliente', value: 0 },
+            { label: 'Entregador', value: 1 },
+          ]}
+          onPress={value => setTipoUsuario(value)}
+          labelStyle={styles.fontTextRadio}
         />
-          {error && <Text style={styles.MenssagemdeValidacao}>{error}</Text>}
+        {error && <Text style={styles.MenssagemdeValidacao}>{error}</Text>}
         <TouchableOpacity style={styles.button} onPress={cadastrarUsuario}>
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={styles.Nav} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.Text}>Já tem uma conta? Faça login</Text>
         </TouchableOpacity>
         <View>
-           <Image source={BatLogo} style={styles.logo}/>
+          <Image source={BatLogo} style={styles.logo}/>
         </View>
       </ScrollView>
     </View>
@@ -149,12 +146,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    height: 40,
+    height: 48,
     borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: 2,
+    borderRadius: 10,
     marginBottom: 10,
     paddingLeft: 10,
+    fontSize: 16,
+    textAlign: 'center'
   },
   button: {
     backgroundColor: "#007bff",
@@ -166,6 +165,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 20
   },
   Nav: {
     marginTop: 10,
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   },
   Text: {
     color: "#007bff",
+    fontSize: 16
   },
   MenssagemdeValidacao: {
     color: "red",
@@ -183,7 +184,16 @@ const styles = StyleSheet.create({
     width: 125, 
     height: 125, 
     alignSelf: 'center', 
-}
+  },
+  fontTextRadio: {
+    fontSize: 16
+  }, 
+  icon: {
+    position: 'absolute',
+    paddingTop: 10,
+    paddingLeft: 8,
+    color: 'black'
+  },
 });
 
 export default Cadastro;

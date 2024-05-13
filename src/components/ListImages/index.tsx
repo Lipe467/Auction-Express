@@ -1,4 +1,4 @@
-import { FlatList, Image, Text } from 'react-native';
+import { FlatList, Image} from 'react-native';
 import React from 'react';
 
 // Importe keys apenas se for necessário para outras configurações

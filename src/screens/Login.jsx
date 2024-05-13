@@ -1,19 +1,20 @@
-import React, { useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, useEffect } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import axios from "axios";
-import BatLogo from "../../assets/logo.png";
+import logoAuction from "../../assets/logoAuction.png";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Entypo'
+import Icons from 'react-native-vector-icons/Fontisto'
 
+import { IP_API } from "../config/config";
 const Login = ({ navigation, Cadastro }) => {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
-  
-
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
   
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://192.168.137.1:8080/cadastro/login', {
+      const response = await axios.post(`${IP_API}/cadastro/login`, {
         email: email,
         senha: senha,
       });
@@ -33,9 +34,10 @@ const Login = ({ navigation, Cadastro }) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.logoContainer}>
-          <Image source={BatLogo} style={styles.logo} />
+          <Image source={logoAuction} style={styles.logo} />
         </View>
         <Text style={styles.title}>BEM VINDO(A)</Text>
+        <View>
         <TextInput
           onChangeText={setEmail}
           value={email}
@@ -43,6 +45,9 @@ const Login = ({ navigation, Cadastro }) => {
           style={styles.input}
           placeholder='Email'
         />
+        <Icon style={styles.icon} name="mail" size={25}/>
+        </View>
+        <View>
         <TextInput
           onChangeText={setSenha}
           value={senha}
@@ -50,10 +55,13 @@ const Login = ({ navigation, Cadastro }) => {
           placeholder='Senha'
           secureTextEntry={true}
         />
+        <Icons style={styles.icons} name="locked"  size={25}/>
+        </View>
+        
         <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-        <Text style={{textAlign: 'center', verticalAlign: 'bottom' , margin:18}}
+        <Text style={styles.textCadastrar}
               onPress={() =>
           navigation.navigate('Cadastro', {Cadastro : Cadastro})}>Cadastrar</Text>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -66,19 +74,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffff",
   },
   logoContainer: {
-    flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
     marginBottom: 60,
-    paddingTop: 20,
+    paddingTop: 25,
     paddingBottom: 5,
   },
   logo: {
-    width: 250,
-    height: 250,
+    width: 300,
+    height: 300,
     alignSelf: 'center',
   },
   title: {
@@ -88,11 +95,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    height: 42,
+    height: 50,
     marginVertical: 10,
     borderWidth: 2,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 12,
+    textAlign: "center",
+    fontSize: 20,
   },
   buttonContainer: {
     backgroundColor: '#007bff',
@@ -102,6 +111,8 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     marginBottom: 20,
+    borderWidth:2,
+    elevation: 5
   },
   buttonText: {
     color: '#fff',
@@ -114,6 +125,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
+  textCadastrar: {
+    textAlign: 'center',
+    verticalAlign: 'bottom' , 
+    margin:18,
+    fontSize: 18
+  },
+  icon: {
+    position: 'absolute',
+    paddingTop: 20,
+    paddingLeft: 8,
+    color: 'black'
+  },
+  icons: {
+    position: 'absolute',
+    paddingTop: 20,
+    paddingLeft: 8,
+    color: 'black'
+  }
 });
 
 export default Login;
