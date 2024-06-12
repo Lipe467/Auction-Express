@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="https://portal.tjpr.jus.br/tjpr-assinador">
+    <information>
+        <title>Assinador de Arquivos</title>
+        <vendor>Tribunal de Justica do Parana - TJPR</vendor>
+        <homepage href="https://www.tjpr.jus.br"/>
+        <description>Assinador de arquivos (PKCS#7 - CMS e PDF) do Tribunal de Justica do Parana - TJPR.</description>
+        <description kind="short">Assinador de Arquivos</description>
+        <offline-allowed/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.8+"/>
+        <jar eager="true" href="assinadorDesktop-full.jar" main="true"/>
+    </resources>
+    <application-desc main-class="br.jus.tjpr.assinadordesktop.AssinadorDesktopApp">
+        <argument>-isAppletBehaviour</argument>
+        <argument>-appletBehaviourConfigJSON={"stampSelection":"NENHUMA","setStampAll":false,"suppressFootNote":true,"openCertificateFileDialog":true,"appletBehaviourHashList":[{"id":"0","hash":"eKwJDDR6amAG69C9WLPbAmFqPKQ="},{"id":"1","hash":"K+FubmED09glEkX0phIRBJnd5Eo="},{"id":"2","hash":"1PsOgNKSnFx+XmZAg0L5dLFFN2o="}],"appletBehaviourSignatureType":"HASH","appletBehaviourCookies":[{"name":"JSESSIONID","value":"qrTzkXf4tQ91gPT7kL2zcGfk9bcxIIr5ArYnUgxz"},{"name":"projudi-route","value":"1715051452.108.382.785767|7bdfb9805156495edcc76f60781792d6"}],"appletBehaviourPostURL":"https://projudi.tjpr.jus.br/projudi/upload.do?_tj=045d1114f40e7d828b98caa0d7c01867df53df2603bbf9aa9be537fd80a714371e295a46841ca77b0c5f67ade7a76c0af803e5b99293cbd6c4c40b435e390dd0dcf931535867e159767073077d322d1c81e5ad0ac3c1fd979f38e01714f9ac9ee3c4c3c2fd85241378d308f9a8feed15586da81a626fb2ef72164adcb93c898abd57337e3fd755e43d14e2b6bb0e285f"}</argument>
+    </application-desc>
+</jnlp>
