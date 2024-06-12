@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AuctionExpress",
-    "slug": "AuctionExpress",
+    "name": "Auction",
+    "slug": "Auction",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,6 +14,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "permissions": [
+      "INTERNET"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -21,11 +24,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.anonymous.AuctionExpress"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyCgNPJeLWcbkojoJHNIoXZ7Zi3FP-gZPro",
+        "authDomain": "auctiontcc-e2489.firebaseapp.com",
+        "projectId": "auctiontcc-e2489",
+        "storageBucket": "auctiontcc-e2489.appspot.com",
+        "messagingSenderId": "SEU_ID_DE_MENSAGENS",
+        "appId": "1:1097924382218:android:267209577b8af2467ed9f"
+      }
     }
   }
 }
